@@ -1,0 +1,367 @@
+/* =========================================================
+   1. IDENTIDAD VISUAL (cambia aquí los colores de tu logo)
+   ========================================================= */
+:root {
+    --color-principal: #1f3fc4;   /* azul rey del logo */
+    --color-oscuro: #12257a;      /* azul profundo */
+    --color-acento: #ffd60a;      /* amarillo GOMI */
+    --color-verde: #6ad41f;       /* verde lima LOCAS */
+    --color-verde-oscuro: #3d9a0b;/* verde para textos */
+    --color-celeste: #3d6bff;     /* azul brillante */
+    --color-fondo: #fffbe8;       /* crema cálido */
+    --color-fondo-2: #dff1ff;     /* celeste claro */
+    --color-texto: #14224d;
+    --color-blanco: #ffffff;
+    --sombra: 0 8px 24px rgba(31, 63, 196, .18);
+    --radio: 22px;
+}
+
+/* =========================================================
+   2. TIPOGRAFÍA Y BASE
+   ========================================================= */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+
+body {
+    font-family: 'Nunito', 'Trebuchet MS', Verdana, sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--color-texto);
+    background: var(--color-fondo);
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Lilita One', 'Trebuchet MS', sans-serif;
+    line-height: 1.15;
+    color: var(--color-principal);
+}
+h1 { font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 400; letter-spacing: .5px; }
+h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 400; letter-spacing: .5px; }
+h3 { font-size: 1.4rem; font-weight: 400; }
+
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+
+section { padding: 80px 8%; }
+
+.seccion-encabezado { text-align: center; max-width: 640px; margin: 0 auto 45px; }
+.seccion-encabezado p { margin-top: 10px; }
+
+.etiqueta {
+    display: inline-block;
+    background: var(--color-fondo-2);
+    color: var(--color-principal);
+    font-weight: 700;
+    font-size: .8rem;
+    letter-spacing: 1.5px;
+    padding: 6px 16px;
+    border-radius: 50px;
+    margin-bottom: 14px;
+}
+
+/* Botones */
+.boton, .boton-pequeno, .boton-promo, .boton-calcular, .boton-contacto {
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: 'Lilita One', sans-serif;
+    font-weight: 400;
+    letter-spacing: .4px;
+    transition: transform .2s, box-shadow .2s, background .2s;
+}
+.boton {
+    background: var(--color-principal);
+    color: var(--color-blanco);
+    padding: 14px 32px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    box-shadow: var(--sombra);
+}
+.boton:hover { background: var(--color-oscuro); transform: translateY(-3px); }
+
+/* =========================================================
+   3. ENCABEZADO Y MENÚ
+   ========================================================= */
+.encabezado {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 8%;
+    background: rgba(255, 251, 232, .95);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 2px 12px rgba(31, 63, 196, .1);
+}
+.logo img { height: 64px; width: 64px; border-radius: 50%; transition: transform .3s; }
+.logo img:hover { transform: rotate(-8deg) scale(1.08); }
+
+.menu { display: flex; gap: 6px; }
+.menu a {
+    text-decoration: none;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: 50px;
+    transition: background .2s, color .2s;
+}
+.menu a:hover { background: var(--color-acento); color: var(--color-oscuro); }
+
+.menu-toggle { display: none; }
+.menu-boton { display: none; font-size: 2rem; cursor: pointer; color: var(--color-principal); }
+
+/* =========================================================
+   4. PORTADA
+   ========================================================= */
+.portada {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    align-items: center;
+    gap: 40px;
+    background:
+        radial-gradient(circle at 85% 20%, var(--color-fondo-2) 0, transparent 50%), radial-gradient(circle at 5% 90%, rgba(106, 212, 31, .18) 0, transparent 35%),
+        var(--color-fondo);
+    padding-top: 60px;
+}
+.portada-texto p { margin: 18px 0 28px; font-size: 1.15rem; max-width: 520px; }
+.resaltado {
+    background: var(--color-acento);
+    color: var(--color-principal);
+    display: inline-block;
+    padding: 0 .3em;
+    border-radius: 16px;
+    transform: rotate(-2deg);
+    box-shadow: 4px 4px 0 var(--color-verde);
+}
+.portada-imagen img {
+    margin: 0 auto;
+    max-width: 480px;
+    border-radius: 36px;
+    box-shadow: var(--sombra);
+    transform: rotate(2deg);
+    transition: transform .4s;
+}
+.portada-imagen img:hover { transform: rotate(0) scale(1.03); }
+
+/* =========================================================
+   5. NOSOTROS
+   ========================================================= */
+.nosotros {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: center;
+    background: var(--color-blanco);
+}
+.nosotros-fotos { display: grid; gap: 18px; }
+.nosotros-fotos img {
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    width: 100%;
+}
+.nosotros-fotos img:nth-child(2) { width: 75%; margin-left: auto; margin-top: -40px; }
+.nosotros-contenido p { margin-top: 14px; }
+.lista-diferencial { list-style: none; margin-top: 20px; display: grid; gap: 10px; }
+.lista-diferencial li {
+    background: var(--color-fondo);
+    border-left: 6px solid var(--color-verde);
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-weight: 700;
+}
+
+/* =========================================================
+   6. CATÁLOGO
+   ========================================================= */
+.productos { background: var(--color-fondo); }
+
+.contenedor-productos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 28px;
+    max-width: 1150px;
+    margin: 0 auto;
+}
+.tarjeta-producto {
+    background: var(--color-blanco);
+    border-radius: var(--radio);
+    overflow: hidden;
+    box-shadow: var(--sombra);
+    display: flex; flex-direction: column;
+    transition: transform .3s, box-shadow .3s;
+}
+.tarjeta-producto { border: 3px solid transparent; }
+.tarjeta-producto:hover { transform: translateY(-8px); border-color: var(--color-acento); box-shadow: 0 14px 34px rgba(31, 63, 196, .3); }
+.tarjeta-producto img { width: 100%; aspect-ratio: 1 / 1; object-fit: contain; background: var(--color-fondo); padding: 6px; }
+.tarjeta-info { padding: 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.tarjeta-info p { font-size: .95rem; flex: 1; }
+.precio { font-family: 'Lilita One', sans-serif; font-weight: 400; font-size: 1.5rem; color: var(--color-verde-oscuro); }
+.boton-pequeno {
+    background: var(--color-principal);
+    color: var(--color-blanco);
+    text-align: center;
+    padding: 10px 20px;
+    border-radius: 50px;
+}
+.boton-pequeno:hover { background: var(--color-oscuro); transform: scale(1.04); }
+
+/* =========================================================
+   7. PROMOCIONES (fondo oscuro para diferenciarse)
+   ========================================================= */
+.promociones {
+    background: linear-gradient(135deg, var(--color-principal), var(--color-oscuro));
+    color: var(--color-blanco);
+}
+.promociones h2 { color: var(--color-blanco); }
+.promociones-encabezado { text-align: center; max-width: 600px; margin: 0 auto 40px; }
+.promociones-encabezado p { margin-top: 10px; }
+.etiqueta-clara { background: var(--color-acento); color: var(--color-oscuro); }
+
+.contenedor-promociones {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 28px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+.tarjeta-promocion {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    background: var(--color-blanco);
+    color: var(--color-texto);
+    border-radius: var(--radio);
+    overflow: hidden;
+    transition: transform .3s;
+}
+.tarjeta-promocion:hover { transform: scale(1.03); }
+.tarjeta-promocion img { height: 100%; width: 100%; object-fit: contain; min-height: 220px; background: var(--color-fondo); padding: 6px; }
+.contenido-promocion { padding: 22px; display: flex; flex-direction: column; gap: 8px; justify-content: center; }
+.descuento {
+    align-self: flex-start;
+    background: var(--color-acento);
+    color: var(--color-oscuro);
+    font-weight: 800;
+    padding: 4px 14px;
+    border-radius: 50px;
+    font-size: .85rem;
+}
+.boton-promo {
+    align-self: flex-start;
+    background: var(--color-principal);
+    color: var(--color-blanco);
+    padding: 9px 20px;
+    border-radius: 50px;
+}
+.boton-promo:hover { background: var(--color-verde); color: var(--color-oscuro); transform: translateY(-2px); }
+
+/* =========================================================
+   8. CALCULADORA (campos, botón y resultado)
+   ========================================================= */
+.seccion-calculadora { background: var(--color-fondo-2); }
+
+.calculadora-contenedor, .contacto-contenedor {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 30px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+.calculadora-formulario, .contacto-formulario, .contacto-informacion {
+    background: var(--color-blanco);
+    padding: 30px;
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+}
+label { display: block; font-weight: 700; margin: 16px 0 6px; }
+input, select, textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid #b9c9f5;
+    border-radius: 14px;
+    font-family: inherit;
+    font-size: 1rem;
+    background: var(--color-fondo);
+    transition: border-color .2s, box-shadow .2s;
+}
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--color-principal);
+    box-shadow: 0 0 0 4px rgba(31, 63, 196, .15);
+}
+.boton-calcular, .boton-contacto {
+    width: 100%;
+    margin-top: 22px;
+    padding: 14px;
+    border-radius: 50px;
+    background: var(--color-principal);
+    color: var(--color-blanco);
+    font-size: 1.1rem;
+}
+.boton-calcular:hover, .boton-contacto:hover { background: var(--color-oscuro); transform: translateY(-3px); }
+
+.resultado-calculadora {
+    background: linear-gradient(160deg, var(--color-celeste), var(--color-principal));
+    color: var(--color-blanco);
+    padding: 30px;
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    display: flex; flex-direction: column; gap: 6px; justify-content: center;
+}
+.resultado-calculadora h3 { color: var(--color-blanco); margin-bottom: 8px; }
+.resultado-calculadora hr { border: none; border-top: 2px dashed rgba(255, 255, 255, .5); margin: 14px 0; }
+.valor-total { font-family: 'Lilita One', sans-serif; font-size: 3.2rem; font-weight: 400; line-height: 1; }
+.mensaje-calculadora { margin-top: 10px; font-size: .9rem; opacity: .9; }
+
+/* =========================================================
+   9. CONTACTO
+   ========================================================= */
+.seccion-contacto { background: var(--color-blanco); }
+.contacto-contenedor { grid-template-columns: 1fr 1fr; }
+.contacto-informacion, .contacto-formulario { background: var(--color-fondo); }
+.dato-contacto { margin-top: 18px; }
+.dato-contacto h4 { font-size: 1.1rem; color: var(--color-verde-oscuro); }
+.dato-contacto a { text-decoration: none; font-weight: 700; transition: color .2s; }
+.dato-contacto a:hover { color: var(--color-principal); text-decoration: underline; }
+
+/* =========================================================
+   10. PIE DE PÁGINA
+   ========================================================= */
+.pie {
+    background: var(--color-oscuro);
+    color: var(--color-fondo);
+    text-align: center;
+    padding: 35px 8%;
+    display: grid; gap: 8px; justify-items: center;
+}
+.pie-logo { height: 90px; width: 90px; border-radius: 50%; }
+.pie-redes { display: flex; gap: 20px; }
+.pie-redes a { text-decoration: none; font-weight: 700; transition: color .2s; }
+.pie-redes a:hover { color: var(--color-acento); }
+
+/* =========================================================
+   ADAPTACIÓN A CELULARES
+   ========================================================= */
+@media (max-width: 800px) {
+    section { padding: 55px 6%; }
+    .encabezado { padding: 8px 6%; }
+
+    .menu-boton { display: block; }
+    .menu {
+        display: none;
+        position: absolute; top: 100%; left: 0; right: 0;
+        flex-direction: column; gap: 0;
+        background: var(--color-fondo);
+        padding: 10px 6% 18px;
+        box-shadow: 0 10px 18px rgba(31, 63, 196, .15);
+    }
+    .menu a { padding: 12px 10px; }
+    .menu-toggle:checked ~ .menu { display: flex; }
+
+    .portada, .nosotros, .calculadora-contenedor, .contacto-contenedor { grid-template-columns: 1fr; }
+    .portada-imagen { order: -1; }
+    .portada-imagen img { max-width: 320px; }
+    .tarjeta-promocion { grid-template-columns: 1fr; }
+    .tarjeta-promocion img { min-height: 180px; max-height: 240px; }
+    .nosotros-fotos img:nth-child(2) { margin-top: 0; width: 100%; }
+}
+
+/* Etiqueta visible sobre fondos rosados */
+.seccion-calculadora .etiqueta { background: var(--color-blanco); }

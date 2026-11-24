@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gomilocas | Gomitas enchiladas y dulces</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <!-- ENCABEZADO Y MENÚ DE NAVEGACIÓN -->
+    <header class="encabezado">
+        <a href="#inicio" class="logo">
+            <img src="img/logo-gomilocas.png" alt="Logo de Gomilocas: niño con gorra azul y gomitas">
+        </a>
+
+        <input type="checkbox" id="menu-toggle" class="menu-toggle">
+        <label for="menu-toggle" class="menu-boton" aria-label="Abrir menú">&#9776;</label>
+
+        <nav class="menu">
+            <a href="#inicio">Inicio</a>
+            <a href="#nosotros">Nosotros</a>
+            <a href="#productos">Productos</a>
+            <a href="#promociones">Promociones</a>
+            <a href="#calculadora">Calculadora</a>
+            <a href="#contacto">Contacto</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <!-- PORTADA PRINCIPAL -->
+        <section id="inicio" class="portada">
+            <div class="portada-texto">
+                <span class="etiqueta">GOMITAS ENCHILADAS Y DULCES</span>
+                <h1>Dulce, picante y <span class="resaltado">bien loco</span></h1>
+                <p>Bandejas, vasos y bolsitas llenas de gomitas con chamoy y chile. ¿Prefieres lo dulce? También tenemos pinchos sin picante.</p>
+                <a href="#productos" class="boton">Conoce nuestros productos</a>
+            </div>
+            <div class="portada-imagen">
+                <img src="img/vaso.jpeg" alt="Vaso de frutas y gomitas enchiladas con chamoy">
+            </div>
+        </section>
+
+        <!-- SECCIÓN SOBRE NOSOTROS -->
+        <section id="nosotros" class="nosotros">
+            <div class="nosotros-fotos">
+                <img src="img/bolsitas.jpeg" alt="Bolsitas de gomitas enchiladas en tres tamaños">
+                <img src="img/pinchos.jpg" alt="Pinchos de gomitas dulces">
+            </div>
+
+            <div class="nosotros-contenido">
+                <h2>Conoce Gomilocas</h2>
+                <p>Somos un emprendimiento que nació de un antojo: mezclar lo dulce, lo ácido y lo picante en un solo bocado. Preparamos cada pedido a mano, con chamoy y tajín de la casa.</p>
+                <p>Lo que nos diferencia: tú eliges cómo lo quieres, enchilado con chamoy y polvo, o dulce y sin picante, en bandeja, vaso, bolsita o pincho.</p>
+                <ul class="lista-diferencial">
+                    <li>Hecho a mano y al momento</li>
+                    <li>Tres tamaños de bolsita</li>
+                    <li>Opción dulce, sin chile</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- CATÁLOGO DE PRODUCTOS -->
+        <section id="productos" class="productos">
+            <div class="seccion-encabezado">
+                <span class="etiqueta">NUESTRO CATÁLOGO</span>
+                <h2>Elige tu antojo</h2>
+                <p>Cada producto se prepara al pedido. Toca el botón para consultarlo por WhatsApp.</p>
+            </div>
+
+            <div class="contenedor-productos">
+
+                <!-- PRODUCTO 1 -->
+                <article class="tarjeta-producto">
+                    <img src="img/bandeja.jpeg" alt="Bandeja de frutas y gomitas enchiladas">
+                    <div class="tarjeta-info">
+                        <h3>Bandeja loca</h3>
+                        <p>Mango, manzana verde y gomitas con chamoy y tajín, en tres compartimentos y copita de chamoy.</p>
+                        <span class="precio">$30.000</span>
+                        <a href="https://wa.me/573017518888?text=Hola%2C%20quiero%20consultar%20la%20Bandeja%20loca" class="boton-pequeno" target="_blank" rel="noopener">Consultar</a>
+                    </div>
+                </article>
+
+                <!-- PRODUCTO 2 -->
+                <article class="tarjeta-producto">
+                    <img src="img/vaso.jpeg" alt="Vaso de frutas y gomitas enchiladas">
+                    <div class="tarjeta-info">
+                        <h3>Vaso enchilado</h3>
+                        <p>Gomitas surtidas y fruta bañadas en chamoy, con paleta de tajín encima.</p>
+                        <span class="precio">$15.000</span>
+                        <a href="https://wa.me/573017518888?text=Hola%2C%20quiero%20consultar%20el%20Vaso%20enchilado" class="boton-pequeno" target="_blank" rel="noopener">Consultar</a>
+                    </div>
+                </article>
+
+                <!-- PRODUCTO 3 -->
+                <article class="tarjeta-producto">
+                    <img src="img/bolsitas.jpeg" alt="Bolsitas de gomitas enchiladas pequeña, mediana y grande">
+                    <div class="tarjeta-info">
+                        <h3>Bolsitas enchiladas</h3>
+                        <p>Gomitas con polvo de la casa. Pequeña $3.000, mediana $6.000 y grande $9.000.</p>
+                        <span class="precio">Desde $3.000</span>
+                        <a href="https://wa.me/573017518888?text=Hola%2C%20quiero%20consultar%20las%20Bolsitas%20enchiladas" class="boton-pequeno" target="_blank" rel="noopener">Consultar</a>
+                    </div>
+                </article>
+
+                <!-- PRODUCTO 4 -->
+                <article class="tarjeta-producto">
+                    <img src="img/pinchos.jpg" alt="Pinchos de gomitas dulces sin chile">
+                    <div class="tarjeta-info">
+                        <h3>Pinchos dulces</h3>
+                        <p>Aros, corazones, cintas y malvaviscos en palito. Sin chamoy ni polvo.</p>
+                        <span class="precio">$5.000</span>
+                        <a href="https://wa.me/573017518888?text=Hola%2C%20quiero%20consultar%20los%20Pinchos%20dulces" class="boton-pequeno" target="_blank" rel="noopener">Consultar</a>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- SECCIÓN DE PROMOCIONES -->
+        <section id="promociones" class="promociones">
+            <div class="promociones-encabezado">
+                <span class="etiqueta etiqueta-clara">OFERTAS ESPECIALES</span>
+                <h2>Promociones para ti</h2>
+                <p>Aprovecha estos combos y llévate más antojo por menos.</p>
+            </div>
+
+            <div class="contenedor-promociones">
+
+                <!-- PROMOCIÓN 1 -->
+                <article class="tarjeta-promocion">
+                    <img src="img/bolsitas.jpeg" alt="Promoción de bolsitas de gomitas enchiladas">
+                    <div class="contenido-promocion">
+                        <span class="descuento">2 x 1</span>
+                        <h3>Bolsitas pequeñas</h3>
+                        <p>Compra una bolsita pequeña enchilada y recibe otra gratis los fines de semana.</p>
+                        <a href="#calculadora" class="boton-promo">Calcular mi pedido</a>
+                    </div>
+                </article>
+
+                <!-- PROMOCIÓN 2 -->
+                <article class="tarjeta-promocion">
+                    <img src="img/pinchos.jpg" alt="Novedad de pinchos de gomitas dulces">
+                    <div class="contenido-promocion">
+                        <span class="descuento">NOVEDAD</span>
+                        <h3>Pinchos dulces</h3>
+                        <p>Ideales para fiestas y regalos: pide una docena y ahorra.</p>
+                        <a href="#contacto" class="boton-promo">Pedir ahora</a>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- SECCIÓN CALCULADORA (solo diseño; el cálculo se programará en la siguiente etapa) -->
+        <section id="calculadora" class="seccion-calculadora">
+            <div class="seccion-encabezado">
+                <span class="etiqueta">COTIZA TU PEDIDO</span>
+                <h2>Calcula el valor de tu compra</h2>
+                <p>Ingresa los datos de tu pedido para conocer el valor estimado.</p>
+            </div>
+
+            <div class="calculadora-contenedor">
+
+                <div class="calculadora-formulario">
+                    <h3>Información del pedido</h3>
+
+                    <label for="producto">Selecciona un producto:</label>
+                    <select id="producto">
+                        <option value="">Selecciona una opción</option>
+                        <option value="18000">Bandeja loca</option>
+                        <option value="10000">Vaso enchilado</option>
+                        <option value="3000">Bolsita pequeña</option>
+                        <option value="6000">Bolsita mediana</option>
+                        <option value="9000">Bolsita grande</option>
+                        <option value="5000">Pincho dulce</option>
+                    </select>
+
+                    <label for="cantidad">Cantidad:</label>
+                    <input type="number" id="cantidad" placeholder="Ingresa la cantidad" min="1">
+
+                    <label for="descuento">Código de descuento:</label>
+                    <input type="text" id="descuento" placeholder="Si tienes un código, escríbelo">
+
+                    <button type="button" class="boton-calcular">Calcular pedido</button>
+                </div>
+
+                <div class="resultado-calculadora">
+                    <h3>Resumen de tu pedido</h3>
+
+                    <p>Producto seleccionado:</p>
+                    <strong>Esperando información...</strong>
+
+                    <hr>
+
+                    <p>Valor total:</p>
+                    <span class="valor-total">$0</span>
+
+                    <p class="mensaje-calculadora">Aquí aparecerá el resultado de tu compra.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECCIÓN DE CONTACTO -->
+        <section id="contacto" class="seccion-contacto">
+            <div class="seccion-encabezado">
+                <span class="etiqueta">ESTAMOS PARA ATENDERTE</span>
+                <h2>¡Hablemos!</h2>
+                <p>¿Tienes alguna pregunta o quieres hacer tu pedido? Escríbenos.</p>
+            </div>
+
+            <div class="contacto-contenedor">
+
+                <!-- INFORMACIÓN DE CONTACTO -->
+                <div class="contacto-informacion">
+                    <h3>Información de contacto</h3>
+
+                    <div class="dato-contacto">
+                        <h4>WhatsApp</h4>
+                        <p><a href="https://wa.me/573017518888" target="_blank" rel="noopener">300 000 0000</a></p>
+                    </div>
+                    <div class="dato-contacto">
+                        <h4>Correo electrónico</h4>
+                        <p><a href="mailto:gomilocas2026@email.com">micorreo@email.com</a></p>
+                    </div>
+                    <div class="dato-contacto">
+                        <h4>Redes sociales</h4>
+                        <p><a href="#">Instagram</a> · <a href="#">Facebook</a> · <a href="#">TikTok</a></p>
+                    </div>
+                    <div class="dato-contacto">
+                        <h4>Ubicación y horario</h4>
+                        <p>Tu ciudad, Colombia<br>Lunes a sábado: 8:00 a. m. - 6:00 p. m.</p>
+                    </div>
+                </div>
+
+                <!-- FORMULARIO DE CONTACTO -->
+                <div class="contacto-formulario">
+                    <h3>Envíanos un mensaje</h3>
+                    <form>
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" id="nombre" placeholder="Escribe tu nombre">
+
+                        <label for="correo">Correo electrónico:</label>
+                        <input type="email" id="correo" placeholder="Escribe tu correo">
+
+                        <label for="mensaje">Mensaje:</label>
+                        <textarea id="mensaje" rows="5" placeholder="¿En qué podemos ayudarte?"></textarea>
+
+                        <button type="button" class="boton-contacto">Enviar mensaje</button>
+                    </form>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="pie">
+        <img src="img/logo-gomilocas.png" alt="Gomilocas" class="pie-logo">
+        <p>&copy; 2026 Gomilocas. Todos los derechos reservados.</p>
+        <p class="pie-redes"><a href="#">Instagram</a> <a href="#">Facebook</a> <a href="#">TikTok</a></p>
+    </footer>
+
+</body>
+</html>
