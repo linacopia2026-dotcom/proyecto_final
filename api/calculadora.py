@@ -1,31 +1,10 @@
-"""
-Backend de la calculadora de Gomilocas.
-
-Cómo ejecutarlo:
-1. Guarda este archivo en la misma carpeta que index.html.
-2. Abre una terminal en esa carpeta.
-3. Ejecuta: python calculadora.py
-4. Abre en el navegador: http://localhost:8000
-
-Este servidor usa únicamente la biblioteca estándar de Python.
-"""
-
-from datetime import datetime
-from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
-from pathlib import Path
-import json
-import math
+from datetime import datetime, timedelta, timezone
+from http.server import BaseHTTPRequestHandler
+from urllib.parse import parse_qs, quote
+from html import escape
 
 
-# 1. Obtiene la carpeta donde está guardado este archivo.
-# Así el servidor encuentra index.html, css/ e img/ aunque se ejecute
-# desde otra carpeta de la terminal.
-CARPETA_PROYECTO = Path(__file__).resolve().parent
-
-
-# 2. Precios tomados de los valores de las opciones del <select id="producto">
-# de index.html. Se usan los valores del HTML de la calculadora,
-# no los precios diferentes que aparecen en las tarjetas del catálogo.
+# Productos y precios de la calculadora
 PRODUCTOS = {
     "18000": {"nombre": "Bandeja loca", "precio": 18000},
     "10000": {"nombre": "Vaso enchilado", "precio": 10000},
@@ -36,9 +15,7 @@ PRODUCTOS = {
 }
 
 
-# 3. No se encontraron códigos concretos de descuento en index.html.
-# Por eso el diccionario empieza vacío. Cuando tengas códigos reales,
-# puedes agregarlos, por ejemplo: "GOMI10": 0.10 (10 % de descuento).
+# Códigos de descuento disponibles
 CODIGOS_DESCUENTO = {
     "GOMI10": 0.10,
     "GOMI15": 0.15,
@@ -46,14 +23,17 @@ CODIGOS_DESCUENTO = {
 }
 
 
-def calcular_pedido(producto, cantidad, codigo_descuento=""):
-    """Valida los datos y devuelve el resumen y el total del pedido."""
+def formatear_pesos(monto):
+    """Muestra los valores en pesos colombianos."""
+    return f"${monto:,}".replace(",", ".")
 
-    # 4. Comprueba que el producto exista en la lista de precios.
+
+def calcular_pedido(producto, cantidad, codigo_descuento=""):
+    """Calcula el pedido aplicando las promociones correspondientes."""
+
     if producto not in PRODUCTOS:
         raise ValueError("Selecciona un producto válido.")
 
-    # 5. Convierte la cantidad a número entero y valida que sea positiva.
     try:
         cantidad = int(cantidad)
     except (TypeError, ValueError):
@@ -62,44 +42,51 @@ def calcular_pedido(producto, cantidad, codigo_descuento=""):
     if cantidad < 1:
         raise ValueError("La cantidad debe ser como mínimo 1.")
 
-    # 6. Recupera el nombre y el precio unitario del producto elegido.
     informacion = PRODUCTOS[producto]
     nombre = informacion["nombre"]
     precio_unitario = informacion["precio"]
 
-    # 7. Calcula el subtotal antes de aplicar promociones o descuentos.
+    # Calcula el subtotal
     subtotal = precio_unitario * cantidad
 
-    # 8. Aplica la promoción 2 x 1 a las bolsitas pequeñas los sábados
-    # y domingos, tal como se describe en la sección Promociones de index.html.
-    # En una compra de 1 se paga 1; de 2 se paga 1; de 3 se pagan 2, etc.
+    # Verifica si es sábado o domingo en horario de Colombia
+    horario_colombia = timezone(timedelta(hours=-5))
+    fecha_actual = datetime.now(horario_colombia)
+    es_fin_de_semana = fecha_actual.weekday() in (5, 6)
+
+    # Promoción 2 x 1 para bolsitas pequeñas
     descuento_promocion = 0
-    es_fin_de_semana = datetime.now().weekday() in (5, 6)
 
     if producto == "3000" and es_fin_de_semana:
-        unidades_cobradas = math.ceil(cantidad / 2)
+        unidades_cobradas = (cantidad + 1) // 2
         total_con_promocion = unidades_cobradas * precio_unitario
         descuento_promocion = subtotal - total_con_promocion
     else:
         total_con_promocion = subtotal
 
-    # 9. Normaliza el código: elimina espacios y no distingue mayúsculas.
+    # Valida el código de descuento
     codigo = (codigo_descuento or "").strip().upper()
-
-    # 10. Si se escribió un código, verifica que esté configurado.
-    # Como index.html no define códigos, por ahora cualquier código escrito
-    # será rechazado hasta que agregues uno a CODIGOS_DESCUENTO.
     descuento_codigo = 0
+
     if codigo:
         if codigo not in CODIGOS_DESCUENTO:
             raise ValueError("El código de descuento no es válido.")
+
         porcentaje = CODIGOS_DESCUENTO[codigo]
         descuento_codigo = round(total_con_promocion * porcentaje)
 
-    # 11. Resta el descuento por código al total con promoción.
+    # Calcula el total final
     total = total_con_promocion - descuento_codigo
 
-    # 12. Devuelve todos los datos que la página puede mostrar.
+    mensaje = (
+        "Se aplicó la promoción 2 x 1 de fin de semana."
+        if descuento_promocion > 0
+        else "Pedido calculado correctamente."
+    )
+
+    if descuento_codigo > 0:
+        mensaje += " También se aplicó tu código de descuento."
+
     return {
         "producto": nombre,
         "cantidad": cantidad,
@@ -108,71 +95,218 @@ def calcular_pedido(producto, cantidad, codigo_descuento=""):
         "descuento_promocion": descuento_promocion,
         "descuento_codigo": descuento_codigo,
         "total": total,
-        "mensaje": (
-            "Se aplicó la promoción 2 x 1 de fin de semana."
-            if descuento_promocion > 0
-            else "Pedido calculado correctamente."
-        ),
+        "mensaje": mensaje
     }
 
 
-class ManejadorGomilocas(SimpleHTTPRequestHandler):
-    """Atiende archivos de la página y solicitudes de cálculo."""
+class handler(BaseHTTPRequestHandler):
 
-    # 13. Hace que los archivos HTML, CSS e imágenes se lean desde
-    # la carpeta del proyecto, no desde la carpeta accidental de ejecución.
-    def translate_path(self, path):
-        ruta_solicitada = super().translate_path(path)
-        nombre_relativo = Path(ruta_solicitada).relative_to(Path.cwd())
-        return str(CARPETA_PROYECTO / nombre_relativo)
+    def enviar_html(self, contenido, estado=200):
+        respuesta = contenido.encode("utf-8")
 
-    # 14. Recibe los datos enviados por el navegador a /api/calcular.
-    def do_POST(self):
-        if self.path != "/api/calcular":
-            self.send_error(404, "Ruta no encontrada")
-            return
-
-        try:
-            # 15. Lee la cantidad de bytes del cuerpo de la solicitud.
-            longitud = int(self.headers.get("Content-Length", "0"))
-            cuerpo = self.rfile.read(longitud)
-
-            # 16. Convierte el JSON recibido en un diccionario de Python.
-            datos = json.loads(cuerpo.decode("utf-8"))
-
-            # 17. Ejecuta la función que contiene las reglas de negocio.
-            resultado = calcular_pedido(
-                producto=str(datos.get("producto", "")),
-                cantidad=datos.get("cantidad"),
-                codigo_descuento=datos.get("descuento", ""),
-            )
-
-            # 18. Envía el resultado al navegador con estado HTTP 200.
-            self.enviar_json(200, resultado)
-
-        except (ValueError, json.JSONDecodeError) as error:
-            # 19. Si los datos no son válidos, responde con un mensaje claro.
-            self.enviar_json(400, {"error": str(error)})
-
-    # 20. Convierte un diccionario a JSON y lo envía con las cabeceras correctas.
-    def enviar_json(self, estado, datos):
-        respuesta = json.dumps(datos, ensure_ascii=False).encode("utf-8")
         self.send_response(estado)
-        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Type", "text/html; charset=utf-8")
         self.send_header("Content-Length", str(len(respuesta)))
         self.end_headers()
         self.wfile.write(respuesta)
 
+    def do_GET(self):
+        contenido = """
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <title>Gomilocas - Calculadora</title>
+        </head>
+        <body>
+            <h1>Calculadora Gomilocas</h1>
+            <p>Para calcular tu pedido, regresa a la página principal
+            y completa el formulario.</p>
+            <a href="/">Volver a Gomilocas</a>
+        </body>
+        </html>
+        """
+        self.enviar_html(contenido)
 
-# 21. Esta condición inicia el servidor solo cuando ejecutas este archivo
-# directamente; no lo inicia si se importa desde otro archivo Python.
-if __name__ == "__main__":
-    servidor = ThreadingHTTPServer(("localhost", 8000), ManejadorGomilocas)
-    print("Calculadora Gomilocas activa en http://localhost:8000")
-    print("Presiona Ctrl + C para detener el servidor.")
+    def do_POST(self):
+        try:
+            longitud = int(self.headers.get("Content-Length", "0"))
+            cuerpo = self.rfile.read(longitud).decode("utf-8")
 
-    try:
-        servidor.serve_forever()
-    except KeyboardInterrupt:
-        print("\nCerrando el servidor...")
-        servidor.server_close()
+            datos = parse_qs(cuerpo, keep_blank_values=True)
+
+            producto = datos.get("producto", [""])[0]
+            cantidad = datos.get("cantidad", [""])[0]
+            descuento = datos.get("descuento", [""])[0]
+
+            resultado = calcular_pedido(
+                producto,
+                cantidad,
+                descuento
+            )
+
+            nombre = escape(resultado["producto"])
+            cantidad = resultado["cantidad"]
+            precio = formatear_pesos(resultado["precio_unitario"])
+            subtotal = formatear_pesos(resultado["subtotal"])
+            descuento_promo = formatear_pesos(
+                resultado["descuento_promocion"]
+            )
+            descuento_codigo = formatear_pesos(
+                resultado["descuento_codigo"]
+            )
+            total = formatear_pesos(resultado["total"])
+            mensaje = escape(resultado["mensaje"])
+
+            texto_whatsapp = (
+                f"Hola, quiero realizar un pedido en Gomilocas. "
+                f"Producto: {nombre}. Cantidad: {cantidad}. "
+                f"Total estimado: {total}."
+            )
+
+            enlace_whatsapp = (
+                "https://wa.me/573017518888?text="
+                + quote(texto_whatsapp)
+            )
+
+            contenido = f"""
+            <!DOCTYPE html>
+            <html lang="es">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Resultado de tu pedido | Gomilocas</title>
+                <style>
+                    body {{
+                        font-family: Arial, sans-serif;
+                        background: #fff4f7;
+                        margin: 0;
+                        padding: 30px 15px;
+                        color: #333;
+                    }}
+                    .contenedor {{
+                        max-width: 480px;
+                        margin: 30px auto;
+                        background: white;
+                        padding: 30px;
+                        border-radius: 18px;
+                        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+                    }}
+                    h1 {{
+                        text-align: center;
+                        color: #d63384;
+                    }}
+                    .fila {{
+                        display: flex;
+                        justify-content: space-between;
+                        gap: 15px;
+                        padding: 10px 0;
+                        border-bottom: 1px solid #eee;
+                    }}
+                    .total {{
+                        font-size: 25px;
+                        font-weight: bold;
+                        color: #d63384;
+                        text-align: center;
+                        margin: 25px 0;
+                    }}
+                    .mensaje {{
+                        text-align: center;
+                        color: #555;
+                    }}
+                    .boton {{
+                        display: block;
+                        text-align: center;
+                        padding: 13px;
+                        margin-top: 15px;
+                        border-radius: 10px;
+                        text-decoration: none;
+                        font-weight: bold;
+                    }}
+                    .whatsapp {{
+                        background: #25d366;
+                        color: white;
+                    }}
+                    .volver {{
+                        background: #fce4ec;
+                        color: #a51d5d;
+                    }}
+                </style>
+            </head>
+            <body>
+                <div class="contenedor">
+                    <h1>¡Tu pedido está calculado!</h1>
+
+                    <div class="fila">
+                        <span>Producto</span>
+                        <strong>{nombre}</strong>
+                    </div>
+
+                    <div class="fila">
+                        <span>Cantidad</span>
+                        <strong>{cantidad}</strong>
+                    </div>
+
+                    <div class="fila">
+                        <span>Precio unitario</span>
+                        <strong>{precio}</strong>
+                    </div>
+
+                    <div class="fila">
+                        <span>Subtotal</span>
+                        <strong>{subtotal}</strong>
+                    </div>
+
+                    <div class="fila">
+                        <span>Descuento promoción</span>
+                        <strong>{descuento_promo}</strong>
+                    </div>
+
+                    <div class="fila">
+                        <span>Descuento por código</span>
+                        <strong>{descuento_codigo}</strong>
+                    </div>
+
+                    <div class="total">
+                        Total: {total}
+                    </div>
+
+                    <p class="mensaje">{mensaje}</p>
+
+                    <a class="boton whatsapp"
+                       href="{enlace_whatsapp}"
+                       target="_blank"
+                       rel="noopener">
+                       Continuar por WhatsApp
+                    </a>
+
+                    <a class="boton volver" href="/#calculadora">
+                       Volver a la calculadora
+                    </a>
+                </div>
+            </body>
+            </html>
+            """
+
+            self.enviar_html(contenido)
+
+        except ValueError as error:
+            mensaje_error = escape(str(error))
+
+            contenido = f"""
+            <!DOCTYPE html>
+            <html lang="es">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Error en el pedido | Gomilocas</title>
+            </head>
+            <body>
+                <h1>No pudimos calcular tu pedido</h1>
+                <p>{mensaje_error}</p>
+                <a href="/#calculadora">Regresar e intentarlo nuevamente</a>
+            </body>
+            </html>
+            """
+
+            self.enviar_html(contenido, 400)
