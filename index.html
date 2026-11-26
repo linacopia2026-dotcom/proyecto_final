@@ -41,7 +41,7 @@
                 <a href="#productos" class="boton">Conoce nuestros productos</a>
             </div>
             <div class="portada-imagen">
-                <img src="img/vaso.jpeg" alt="Vaso de frutas y gomitas enchiladas con chamoy">
+                <img src="img/vaso.png" alt="Vaso de frutas y gomitas enchiladas con chamoy">
             </div>
         </section>
 
@@ -87,7 +87,7 @@
 
                 <!-- PRODUCTO 2 -->
                 <article class="tarjeta-producto">
-                    <img src="img/vaso.jpeg" alt="Vaso de frutas y gomitas enchiladas">
+                    <img src="img/vaso.png" alt="Vaso de frutas y gomitas enchiladas">
                     <div class="tarjeta-info">
                         <h3>Vaso enchilado</h3>
                         <p>Gomitas surtidas y fruta bañadas en chamoy, con paleta de tajín encima.</p>
@@ -222,7 +222,7 @@
 
                     <div class="dato-contacto">
                         <h4>WhatsApp</h4>
-                        <p><a href="https://wa.me/573017518888" target="_blank" rel="noopener">300 000 0000</a></p>
+                        <p><a href="https://wa.me/573017518888" target="_blank" rel="noopener">301 751 88 88</a></p>
                     </div>
                     <div class="dato-contacto">
                         <h4>Correo electrónico</h4>
@@ -243,10 +243,10 @@
                     <h3>Envíanos un mensaje</h3>
                     <form>
                         <label for="nombre">Nombre:</label>
-                        <input type="text" id="nombre" placeholder="Escribe tu nombre">
+                        <input type="text" id="nombre" placeholder="Gomilocas">
 
                         <label for="correo">Correo electrónico:</label>
-                        <input type="email" id="correo" placeholder="Escribe tu correo">
+                        <input type="email" id="correo" placeholder="gomilocas2026@gmail.com">
 
                         <label for="mensaje">Mensaje:</label>
                         <textarea id="mensaje" rows="5" placeholder="¿En qué podemos ayudarte?"></textarea>
@@ -266,6 +266,66 @@
         <p>&copy; 2026 Gomilocas. Todos los derechos reservados.</p>
         <p class="pie-redes"><a href="#">Instagram</a> <a href="#">Facebook</a> <a href="#">TikTok</a></p>
     </footer>
+
+
+    <!-- INTEGRACIÓN DE LA CALCULADORA CON PYTHON -->
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const boton = document.querySelector(".boton-calcular");
+        const producto = document.getElementById("producto");
+        const cantidad = document.getElementById("cantidad");
+        const descuento = document.getElementById("descuento");
+
+        const resultado = document.querySelector(".resultado-calculadora");
+        const nombreProducto = resultado.querySelector("strong");
+        const valorTotal = resultado.querySelector(".valor-total");
+        const mensaje = resultado.querySelector(".mensaje-calculadora");
+
+        boton.addEventListener("click", async () => {
+            boton.disabled = true;
+            boton.textContent = "Calculando...";
+            mensaje.textContent = "Procesando tu pedido...";
+
+            try {
+                const respuesta = await fetch("/api/calcular", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        producto: producto.value,
+                        cantidad: cantidad.value,
+                        descuento: descuento.value
+                    })
+                });
+
+                const datos = await respuesta.json();
+
+                if (!respuesta.ok) {
+                    throw new Error(datos.error || "No se pudo calcular el pedido.");
+                }
+
+                nombreProducto.textContent =
+                    datos.producto + " x " + datos.cantidad;
+
+                valorTotal.textContent =
+                    "$" + Number(datos.total).toLocaleString("es-CO");
+
+                mensaje.textContent = datos.mensaje;
+
+            } catch (error) {
+                mensaje.textContent =
+                    error.message.includes("Failed to fetch")
+                    ? "No se pudo conectar con Python. Ejecuta calculadora.py y abre http://localhost:8000."
+                    : error.message;
+            } finally {
+                boton.disabled = false;
+                boton.textContent = "Calcular pedido";
+            }
+        });
+    });
+    </script>
+    <!-- FIN DE LA INTEGRACIÓN -->
 
 </body>
 </html>
